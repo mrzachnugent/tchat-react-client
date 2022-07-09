@@ -1,11 +1,14 @@
+import { NoWorkYetProvider } from './contexts/no-work-yet';
 import './index.css';
 import { Homepage } from './pages/homepage';
-import { TChatProvider } from './TChatProvider';
+import { TChatProvider } from './trpc/useTChat';
 
 function App() {
   return (
     <TChatProvider>
-      <Homepage />
+      <NoWorkYetProvider>
+        <Homepage />
+      </NoWorkYetProvider>
     </TChatProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useState, KeyboardEvent } from 'react';
 import { HiPaperAirplane } from 'react-icons/hi';
+import { trpc } from '../trpc/useTChat';
 import { IUser } from '../types';
-import { trpc } from '../utils/trpc';
 
 export const ChatInput: FC<{
   user: IUser | null;
@@ -22,6 +22,7 @@ export const ChatInput: FC<{
         name: user.name,
         room: 'Main',
         avatarSrc: user.avatarSrc,
+        isOnline: true,
       },
     });
   }
@@ -36,6 +37,7 @@ export const ChatInput: FC<{
         name: user.name,
         room: 'Main',
         avatarSrc: user.avatarSrc,
+        isOnline: true,
       },
     });
   }

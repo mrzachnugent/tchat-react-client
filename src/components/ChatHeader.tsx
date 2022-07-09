@@ -3,10 +3,10 @@ import { HiMenuAlt2, HiInformationCircle } from 'react-icons/hi';
 import { IUser } from '../types';
 import { ThemeToggler } from './ThemeToggler';
 
-export const ChatHeader: FC<{ otherUser?: IUser; user: IUser | null }> = ({
-  otherUser,
-  user,
-}) => (
+export const ChatHeader: FC<{
+  otherUser: IUser | null;
+  user: IUser | null;
+}> = ({ otherUser, user }) => (
   <div className='py-2 border-b-2 border-base-300 bg-base-100 flex justify-between items-center md:px-4 '>
     <label
       htmlFor='my-drawer'
@@ -16,7 +16,7 @@ export const ChatHeader: FC<{ otherUser?: IUser; user: IUser | null }> = ({
     </label>
     {user && otherUser && (
       <div className='flex'>
-        <div className='avatar'>
+        <div className={`avatar ${otherUser.isOnline && 'online'}`}>
           <div className='w-10 h-10 rounded-full bg-primary'>
             <img src={otherUser.avatarSrc} />
           </div>
