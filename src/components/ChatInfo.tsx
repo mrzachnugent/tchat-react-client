@@ -1,17 +1,15 @@
 import { FC } from 'react';
 import { HiChevronDown, HiPlus } from 'react-icons/hi';
-import { useNoWorkYet } from '../contexts/no-work-yet';
-import { IUser } from '../types';
+import { useNotImplementedYet } from './NotImplementedContext';
+import { useChat } from '../trpc/ChatContext';
 
-export const ChatInfo: FC<{ otherUser?: IUser | null; user: IUser | null }> = ({
-  otherUser,
-  user,
-}) => {
-  const { toggleNoWorkYet } = useNoWorkYet();
+export const ChatInfo: FC = () => {
+  const { toggleNoWorkYet } = useNotImplementedYet();
+  const { currentUser, otherUser } = useChat();
   return (
     <>
       <div className='h-8' />
-      {user && (
+      {currentUser && (
         <div className={`avatar ${otherUser?.isOnline && 'online'}`}>
           <div className='w-24 rounded-full'>
             <img src={otherUser?.avatarSrc} />

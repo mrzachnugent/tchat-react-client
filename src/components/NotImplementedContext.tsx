@@ -1,15 +1,16 @@
 import { createContext, FC, ReactNode, useContext, useRef } from 'react';
 
-interface INoWorkYetContext {
+interface INotImplementedContext {
   toggleNoWorkYet(): void;
 }
 
-const NoWorkYetContext = createContext({} as INoWorkYetContext);
+const NotImplementedContext = createContext({} as INotImplementedContext);
 
-{
-  /* <label for="my-modal" class="btn modal-button">open modal</label> */
-}
-export const NoWorkYetProvider: FC<{ children: ReactNode }> = ({
+/**
+ * Wraps app with potential modal
+ * Provides function to open modal exaplining that the feature is not implemented
+ */
+export const NotImplementedFeaturesProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const ref = useRef({} as HTMLInputElement);
@@ -17,7 +18,7 @@ export const NoWorkYetProvider: FC<{ children: ReactNode }> = ({
     ref.current.checked = !ref.current.checked;
   }
   return (
-    <NoWorkYetContext.Provider value={{ toggleNoWorkYet }}>
+    <NotImplementedContext.Provider value={{ toggleNoWorkYet }}>
       {children}
       <input type='checkbox' id='my-modal' className='modal-toggle' ref={ref} />
       <div className='modal'>
@@ -33,10 +34,10 @@ export const NoWorkYetProvider: FC<{ children: ReactNode }> = ({
           </div>
         </div>
       </div>
-    </NoWorkYetContext.Provider>
+    </NotImplementedContext.Provider>
   );
 };
 
-export const useNoWorkYet = () => {
-  return useContext(NoWorkYetContext);
+export const useNotImplementedYet = () => {
+  return useContext(NotImplementedContext);
 };

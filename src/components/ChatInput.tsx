@@ -1,64 +1,26 @@
-import { ChangeEvent, FC, useState, KeyboardEvent } from 'react';
+import { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
 import { HiPaperAirplane } from 'react-icons/hi';
-import { trpc } from '../trpc/useTChat';
-import { IUser } from '../types';
+import { useChat } from '../trpc/ChatContext';
 
-export const ChatInput: FC<{
-  user: IUser | null;
-}> = (props) => {
-  const { user } = props;
-
+export const ChatInput: FC = () => {
+  const { handleTyping, sendMessage } = useChat();
   const [text, setText] = useState('');
-  const handleCurrentUserTyping = trpc.useMutation('tchat.whatchaTyping');
-  const handleSendMessage = trpc.useMutation('tchat.sendMessage');
-
-  function sendMessage(msg: string) {
-    if (!user) return;
-    handleSendMessage.mutate({
-      message: msg,
-      room: 'Main',
-      user: {
-        id: user.id,
-        name: user.name,
-        room: 'Main',
-        avatarSrc: user.avatarSrc,
-        isOnline: true,
-      },
-    });
-  }
-
-  function handleTyping(input: string) {
-    if (!user) return;
-    handleCurrentUserTyping.mutate({
-      text: input,
-      isSharable: true,
-      user: {
-        id: user.id,
-        name: user.name,
-        room: 'Main',
-        avatarSrc: user.avatarSrc,
-        isOnline: true,
-      },
-    });
-  }
 
   function handleOnInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleTyping(e.target.value);
     setText(e.target.value);
   }
 
-  function handleOnInputKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter') {
-      if (!text.length) return;
-      sendMessage(text);
-      setText('');
-    }
-  }
-
   function handleOnSend() {
     if (!text.length) return;
     sendMessage(text);
     setText('');
+  }
+
+  function handleOnInputKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      handleOnSend();
+    }
   }
 
   return (

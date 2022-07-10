@@ -1,29 +1,29 @@
 import { useEffect } from 'react';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
-import { useNoWorkYet } from '../contexts/no-work-yet';
-import { trpc } from '../trpc/useTChat';
-import { IUser } from '../types';
+import { useNotImplementedYet } from './NotImplementedContext';
+import { useChat } from '../trpc/ChatContext';
 
-export const Convos = ({ user }: { user: IUser }) => {
-  const { toggleNoWorkYet } = useNoWorkYet();
-  const logout = trpc.useMutation(['tchat.logout']);
+export const Convos = () => {
+  const { toggleNoWorkYet } = useNotImplementedYet();
+  const { logout } = useChat();
 
   useEffect(() => {
     function logUserOut() {
-      logout.mutate({ user });
+      logout();
     }
 
-    window.onbeforeunload = logUserOut;
+    window.addEventListener('beforeunload', logUserOut);
+
+    return () => {
+      window.removeEventListener('beforeunload', logUserOut);
+    };
   }, []);
 
   return (
     <>
       <div className='h-16 flex justify-between items-center  py-4'>
         <p className='font-bold normal-case text-2xl text-inherit'>Convos</p>
-        <button
-          className='btn btn-ghost btn-circle'
-          onClick={() => logout.mutate({ user })}
-        >
+        <button className='btn btn-ghost btn-circle' onClick={toggleNoWorkYet}>
           <HiOutlinePencilAlt size={24} className='opacity-90' />
         </button>
       </div>

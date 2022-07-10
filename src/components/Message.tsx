@@ -1,37 +1,31 @@
-import { FC, memo, useState } from 'react';
-import { IMessages, IUser } from '../types';
+import { FC } from 'react';
 import { HiHeart } from 'react-icons/hi';
-import { MdReply } from 'react-icons/md';
-import { useNoWorkYet } from '../contexts/no-work-yet';
-import { trpc } from '../trpc/useTChat';
+import { useChat } from '../trpc/ChatContext';
+import { IMessages } from '../types';
 
 interface MessageProps {
   message: IMessages[number];
   isPreviousMessageSameUser: boolean;
   isNextMessageSameUser: boolean;
   isFromCurrentUser: boolean;
-  currentUser: IUser;
-  otherUser: IUser | null;
 }
 
 export const Message: FC<MessageProps> = (props) => {
   const {
     message,
-    currentUser,
-    otherUser,
     isPreviousMessageSameUser,
     isFromCurrentUser,
     isNextMessageSameUser,
   } = props;
-  const toggleLike = trpc.useMutation(['tchat.toggleLike']);
+
+  const { currentUser, otherUser, toggleLike } = useChat();
 
   function handleToggleLike() {
-    toggleLike.mutate({
-      messageId: message.id,
-      room: 'Main',
-      user: currentUser,
-    });
+    toggleLike(message);
   }
+
+  if (!currentUser) return null;
+
   return (
     <div
       className={`message hover:bg-base-300 relative flex transition-all  px-2 pt-2 ${
